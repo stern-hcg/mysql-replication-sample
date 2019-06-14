@@ -28,6 +28,9 @@ services:
       "--innodb_flush_log_at_trx_commit=1",
       "--sync_binlog=1"
       ]
+    networks:
+      cluster:
+        ipv4_address: 172.29.0.2
 
   mysql-node-1: &mysql-node
     <<: *mysql
@@ -49,6 +52,9 @@ services:
       "--character-set-server=utf8mb4",
       "--collation-server=utf8mb4_unicode_ci",
       ]
+    networks:
+      cluster:
+        ipv4_address: 172.29.0.5
   
   mysql-node-2:
     <<: *mysql-node
@@ -65,9 +71,21 @@ services:
       "--character-set-server=utf8mb4",
       "--collation-server=utf8mb4_unicode_ci",
       ]
+    networks:
+      cluster:
+        ipv4_address: 172.29.0.6
     
 
 volumes:
   mysql-master-data:
   mysql-node-1-data:
   mysql-node-2-data:
+
+networks:
+  cluster:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 172.29.0.0/16
